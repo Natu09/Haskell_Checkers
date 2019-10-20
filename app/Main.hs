@@ -6,11 +6,11 @@ import Checkers
 main :: IO ()
 main = tui
 
--- simple_moves :: GameState -> [Move]
--- simple_moves
+simple_moves :: GameState -> [Move]
+simple_moves = undefined
 
--- apply_move :: GameState -> Move -> GameState
--- apply_move gs a = gs
+apply_move :: GameState -> Move -> GameState
+apply_move = undefined
 
 -- s c c m
 
