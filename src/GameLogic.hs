@@ -55,10 +55,29 @@ setMessage s = case (s^.status) of
   Black -> set message
     "Black Turn." s
   _ -> s
+
+-- applyMove :: Move -> GameState -> GameState
+-- applyMove _  s = case s^.status of
+--   Red -> setMessage $ set status Black s
+--   Black -> setMessage $ set status Red s
+--   _ -> initialGameState
+
 applyMove :: Move -> GameState -> GameState
-applyMove _  s = case s^.status of
-  Red -> setMessage $ set status Black s
-  Black -> setMessage $ set status Red s
+applyMove m s = case s^.status of
+  Red -> setMessage $ set status Red (newGameState) -- set redPieces ((head m):(s^.redPieces))
+  Black -> setMessage $ set status Black (newGameState) -- set blackPieces ((head m):(s^.blackPieces))
   _ -> initialGameState
+
+-- if m is valid then set message and status to black/red then apply_moves m s
+
+newGameState :: GameState
+newGameState =
+  GameState { _blackPieces = blackInit
+            , _redPieces = (2,3):redInit -- set redPieces ((head m):(s^.redPieces))
+            , _blackKings = []
+            , _redKings = []
+            , _status = Red
+            , _message = ""}
+
 
  

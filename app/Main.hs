@@ -9,8 +9,9 @@ main = tui
 simple_moves :: GameState -> [Move]
 simple_moves = undefined
 
-apply_move :: GameState -> Move -> GameState
-apply_move = undefined
+
+
+
 
 -- s c c m
 
@@ -19,6 +20,3 @@ apply_move = undefined
 
 -- right_move :: Move -> GameState -> GameState
 -- right_move _ s
-
-
--- hello 
