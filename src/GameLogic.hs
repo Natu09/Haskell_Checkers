@@ -55,13 +55,39 @@ setMessage s = case (s^.status) of
   Black -> set message
     "Black Turn." s
   _ -> s
+  
+-- applyMove :: Move -> GameState -> GameState
+-- applyMove _  s = case s^.status of
+--   Red -> setMessage $ set status Black s
+--   Black -> setMessage $ set status Red s
+--   _ -> initialGameState
+
+
+
+-------------MY CODE ---------------------------------
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 applyMove :: Move -> GameState -> GameState
 applyMove m s = case s^.status of
     Red -> setMessage $ set status Black (apply_move s m) 
     Black -> setMessage $ set status Red (apply_move s m) 
     _ -> initialGameState
 
-
+    
+-- A function to collect a list of all posible moves for a red/black piece
 simple_moves :: GameState -> [Move]
 simple_moves s =
     if s^.status == Red then red_move s
@@ -69,22 +95,18 @@ simple_moves s =
     else [[]]
 
 red_move :: GameState -> [Move]
-red_move s = [[x,y] | x <- _redPieces s,
-                      y <- map (\(x,y) -> (x-1,y-1)) (_redPieces s)]
-
--- (x-1,y+1), (x+1,y+1)
+red_move s = [[(x,y),(a,b)] | (x,y) <- _redPieces s,
+                              (a,b) <- [(x-1,y-1),(x+1,y-1)]]
 
 black_move :: GameState -> [Move]
-black_move s = [[x,y] | x <- _blackPieces s, 
-                        y <- map (\(x,y) -> (x-1,y+1)) (_blackPieces s)]
---  
---m s = case s^.status of
-  --Red -> setMessage $ set status Red (newGameState) -- set redPieces ((head m):(s^.redPieces))
-  --Black -> 
-
-
+black_move s = [[(x,y),(a,b)]  |  (x,y) <- _blackPieces s, 
+                                  (a, b) <- [(x+1,y+1), (x-1,y+1)]]
+                                
 apply_move :: GameState -> Move -> GameState
 apply_move s m = case s^.status of
-  Red -> if m `elem` (simple_moves s) then s{_redPieces = (tail m)++[x | x <- _redPieces s, not (head m == x)]} else s
-  Black -> if m `elem` (simple_moves s) then s{_blackPieces = (tail m)++[x | x <- _blackPieces s, not (head m == x)]} else s
+  Red -> if m `elem` (simple_moves s) then s{_redPieces = (last m):[x | x <- _redPieces s, not (head m == x)]} else s
+  Black -> if m `elem` (simple_moves s) then s{_blackPieces = (last m):[x | x <- _blackPieces s, not (head m == x)]} else s
   _ -> initialGameState  
+  
+
+   
