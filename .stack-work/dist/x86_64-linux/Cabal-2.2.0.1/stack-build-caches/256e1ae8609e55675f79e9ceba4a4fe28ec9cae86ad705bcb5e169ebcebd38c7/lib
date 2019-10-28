@@ -2,15 +2,19 @@
   hash: bc2dbac4c6c805a15c9146eb3ddf52dcca7d67686b01b41beaa2b3dc7a1d9e0a
   size: 10600
   modtime: 1570307086
+/mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/src/Moves.hs:
+  hash: 33d5c08263bd02e9c26cf15d8c390af86f96cc3c6e2fe16fc7c7ab9096d6298f
+  size: 10254
+  modtime: 1572306006
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/package.yaml:
   hash: 35b3665d2d8faeefa4f2a6a74fa784d9a8ba825d78393666f9021beb03fe1e0f
   size: 512
   modtime: 1570307086
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/src/GameLogic.hs:
-  hash: 1df64f788262b0df68e67840d3388b6fc76190adc643f35cd57ad90fcfdabe20
-  size: 10333
-  modtime: 1572240123
+  hash: 0814e05ec0e8091cb41524bee6b54027b16066f7492c799c67559db01d6e6d0f
+  size: 2088
+  modtime: 1572305752
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/tui.cabal:
-  hash: ccc2c6a75f53ad4d6230e2ff3612eacc4f63a2518c9d5214c6f6f5a5ad87a631
-  size: 1078
-  modtime: 1572112000
+  hash: 3d0fa37f760f555af39a7e16ea52bc8c1f1b57006efb743e9c10d855aaa0ac5f
+  size: 1090
+  modtime: 1572303478
