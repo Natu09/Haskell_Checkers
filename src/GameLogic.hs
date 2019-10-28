@@ -63,6 +63,41 @@ setMessage s = case (s^.status) of
 --   _ -> initialGameState
 
 
+------------------------------------------------
+
+
+initialGameState2 :: GameState
+initialGameState2 =
+  GameState { _blackPieces = blackInit2
+            , _redPieces = redInit2
+            , _blackKings = []
+            , _redKings = []
+            , _status = Red
+            , _message = ""}
+
+
+
+
+blackInit2 :: [Coord]
+blackInit2 = [ (1,0), (3,0), (5,0), (7,0)
+            , (0,1), (2,1), (4,1), (6,1)
+            , (2,3), (3,2), (5,2), (7,2)]
+
+redInit2 :: [Coord]
+redInit2 = [ (0,7), (2,7), (4,7), (6,7)
+          , (1,6), (3,6), (5,6), (7,6)
+          , (1,4), (2,5), (4,5), (6,5)]
+
+
+
+
+
+
+
+
+
+
+
 
 -------------MY CODE ---------------------------------
    
@@ -94,11 +129,11 @@ simple_moves s =
     where 
       simplePiece xs = [[(x,y),(x',y')] | (x,y) <- xs,
                                           (x',y') <- [(x+1, y+dir), (x-1, y+dir)],
-                                          emptyposition (x', y') s, onboard (x', y')]
+                                          emptyposition (x', y') s && onboard (x', y')]
                                           
       simpleKing xs = [[(x,y),(x',y')] | (x,y) <- xs,
                                          (x', y') <- [ (x+1,y+1), (x-1,y+1), (x+1,y-1),(x-1,y-1) ],
-                                         emptyposition (x', y') s, onboard (x', y')]
+                                         emptyposition (x', y') s && onboard (x', y')]
 
       dir = case (_status s) of {Red -> -1; Black -> 1}
       emptyposition pos st = not (member pos (_blackKings st)) && not (member pos (_redKings st)) && not (member pos (_blackPieces st)) && not (member pos (_redPieces st))
@@ -110,15 +145,21 @@ member x (a:as)
   | x == a = True
   | otherwise = member x as
 
+remove :: Coord -> [Coord] -> [Coord] 
+remove start ls = [x | x <- ls, start /= x]
 
+replace :: Coord -> Coord -> [Coord] -> [Coord]
 replace start end [] = []
 replace start end (a:as)
   | a == start = end:as
   | otherwise = a:(replace start end as)
-   
-
   
-    
+opponent_occupied :: Coord -> GameState -> Bool 
+opponent_occupied pos st 
+  | _status st == Red = if (member pos (_blackKings st)) || (member pos (_blackPieces st))  then True else False
+  | _status st == Black = if (member pos (_redKings st)) || (member pos (_redPieces st)) then True else False
+  | otherwise = False
+
 jump_moves :: GameState -> [Move]
 jump_moves st = 
       if _status st == Red then (jumpKing (_redKings st)) ++ (jumpPiece (_redPieces st)) --red_move s
@@ -128,25 +169,25 @@ jump_moves st =
       jumpPiece xs =  [(x,y):ys | (x,y) <- xs, ys <- jumpPiece' (x,y) [] (x,y)]
       jumpPiece' start rem (x,y) =
                     [(x'',y''):ys
-                    | ((x',y'),(x'',y'')) <- [((x+1,y+1),(x+2,y+2)),((x-1,y+1),(x-2,y+2)),((x+1,y-1),(x+2,y-2)),((x-1,y-1),(x-2,y-2))],
-                    not (member (x',y') rem) && opponent_occupied (x',y') st && (start==(x'',y'') && notoccupied (x'',y'') st && onboard (x'',y'')),
-                    ys <- jump_over (jumpKing' start ((x',y'):rem) (x'',y'')) ]
-
+                    | ((x',y'),(x'',y'')) <- [((x+1,y+dir),(x+2,y+dir+dir))],
+                    not (member (x',y') rem) && opponent_occupied (x',y') st && (start==(x'',y'') || (notoccupied (x'',y'') st && onboard (x'',y''))),
+                    ys <- jump_over (jumpPiece' start ((x',y'):rem) (x'',y'')) ]
 
       jumpKing xs = [(x,y):ys | (x,y) <- xs, ys <- jumpKing' (x,y) [] (x,y)]
       jumpKing' start rem (x,y) =
                     [ (x'',y''):ys
                     | ((x',y'),(x'',y'')) <- [((x+1,y+1),(x+2,y+2)),((x-1,y+1),(x-2,y+2)),((x+1,y-1),(x+2,y-2)),((x-1,y-1),(x-2,y-2))]
-                    , not (member (x',y') rem) && opponent_occupied (x',y') st && (start==(x'',y'') && notoccupied (x'',y'') st && onboard (x'',y''))
-                    , ys <- jump_over (jumpKing' start ((x',y'):rem) (x'',y'')) ]
-
-      notoccupied pos st = not (member pos (_blackKings st)) && not (member pos (_redKings st)) && not (member pos (_blackPieces st)) && not (member pos (_redPieces st))
+                    , not (member (x',y') rem) && opponent_occupied (x',y') st && (start==(x'',y'') || notoccupied (x'',y'') st && onboard (x'',y''))
+                    , ys <- jump_over (jumpKing' start ((x',y'):rem) (x'',y'')) ] 
+  
+      dir = case (_status st) of {Red -> -1; Black -> 1}
+      notoccupied pos st = not (member pos (_blackKings st)) && not (member pos (_redKings st)) && not (member pos (_blackPieces st)) && not(member pos (_redPieces st))
       onboard pos = if (fst pos < 8 && fst pos >= 0) && (snd pos < 8 && snd pos >= 0)  then True else False
-      opponent_occupied pos st = (member pos (_blackKings st)) || (member pos (_redKings st)) || (member pos (_blackPieces st)) || (member pos (_redPieces st))
       jump_over [] = [[]]
-      jumpover z = z
+      jump_over z = z
 
--- data PieceType = RedKing|BlackKing|RedPiece|BlackPiece
+      
+-- data PieceType = RedKing|BlackKing|RedPiece|BlackPiece 
 
 moves st 
   | jumpmoves /= [] = jumpmoves
@@ -155,78 +196,66 @@ moves st
       simplemoves = simple_moves st
       jumpmoves = jump_moves st
 
+changeplayer :: GameState -> GameState
+changeplayer st
+  | (_status st) == Black = set status Red st
+  | otherwise = set status Black st
 
--- apply_move' :: Move -> GameState -> GameState
--- apply_move' mv st | member mv (mover st) = snd(runSM mover st)
---                   | otherwise = st{_message = "Bad move bro"}
-
--- mover :: Move -> SM(GameState, ())
--- mover [end] = return ()
--- mover (m1:m2:m3) = 
---         do 
---             pt <- removepiece m1
---             _ <- removepiece (jump m1 m2)
---             _ <- addpiece pt m2
---             mover (m2:m1)
-
-
--- removepeice :: Coord -> SM (GameState PieceType)
--- removepiece xy = SM (\st -> piece_remover xy st)
---     where 
---         piece_remover :: Coord -> GameState -> (PieceType, GameState)
---         piece_remover xy st | member xy (_redKings st)
---                             = (RedKing, st {_redKings = remove xy 
---                                                             (_redKings st)})
-
--- addpiece :: PieceType -> Coord -> SM (GameState, ())
--- addpiece pt xy = SM(piece_adder xy)
---         where 
---             piece_adder :: PieceType -> Coord -> GameState -> ((),GameState)
---             piece_adder RedKing xy st = st{_redKings = xy:(_redKings st)}
-
--- data PieceType = RedKing|BlackKing|RedPiece|BlackPiece
 
 applyMove :: Move -> GameState -> GameState
-applyMove m s = case _status s of
-    Red -> if m `elem` (moves s) then (apply_move m s) else setMessage $ set status Black s
-    Black -> if m `elem` (moves s)  then  (apply_move m s) else setMessage $ set status Red s
-    _ -> initialGameState
+applyMove m s
+    | m `elem` (moves s) = if m `elem` (jump_moves s) then (apply_jump m s) else (apply_simple m s)
+    | otherwise = s {_message = "Illegal Move!"}
 
 
-
-apply_move :: Move -> GameState -> GameState
-apply_move [start, end] st
-                    | member start (_redKings st) = 
+apply_simple :: Move -> GameState -> GameState
+apply_simple [start, end] st
+                    | _status st == Red && member start (_redKings st) = 
                     st {_redKings = replace start end (_redKings st), 
-                        _status = changeplayer (_status st) }
-                    | member start (_blackKings st) =
+                        _status = change (_status st) } {_message = "Blacks Turn!"}
+                    | _status st == Black && member start (_blackKings st) =
                     st {_blackKings = replace start end (_blackKings st),
-                        _status = changeplayer (_status st) }
-                    | member start (_redPieces st) =
+                        _status = change (_status st) } {_message = "Reds Turn!"}
+                    |  _status st == Red && member start (_redPieces st) =
                     st {_redPieces = replace start end (_redPieces st),
-                          _status = changeplayer (_status st) }
-                    | member start (_blackPieces st) =
+                          _status = change (_status st) } {_message = "Blacks Turn!"}
+                    | _status st == Black && member start (_blackPieces st) =
                     st {_blackPieces  = replace start end (_blackPieces st),
-                          _status = changeplayer (_status st) }
-                    | otherwise = st {_message = "Illegal Move!!!"}
-                where 
-                  changeplayer Red = Black
-                  changeplayer Black = Red
+                          _status = change (_status st) } {_message = "Reds Turn!"}
+                    | otherwise = st {_message = "Illegal simple!!"}
+                  where 
+                    change Red = Black 
+                    change Black = Red
+
+apply_jump :: Move -> GameState -> GameState
+apply_jump [] st = changeplayer st
+apply_jump (start:(next:rest)) st
+                    | _status st == Red && member start (_redKings st)
+                              = apply_jump (next:rest)
+                                (st{_blackKings = remove (jumped start next) (_blackKings st)
+                                  ,_blackPieces = remove (jumped start next) (_blackPieces st)
+                                  ,_redKings = next:(remove start (_redKings st))
+                                  ,_message = ""})
+                    | _status st == Black && member start (_blackKings st)
+                                = apply_jump (next:rest)
+                                  (st{_redKings = remove (jumped start next) (_redKings st)
+                                    ,_redPieces = remove (jumped start next) (_redPieces st)
+                                    ,_blackKings = next:(remove start (_blackKings st))
+                                    ,_message = ""})
+                    | _status st == Red && member start (_redPieces st)
+                                  = apply_jump (next:rest)
+                                    (st{_blackKings = remove (jumped start next) (_blackKings st)
+                                      ,_blackPieces = remove (jumped start next) (_blackPieces st)
+                                      ,_redPieces = next:(remove start (_redPieces st))
+                                    ,_message = ""})
+                    | _status st == Black && member start (_blackPieces st)
+                                  = apply_jump (next:rest)
+                                    (st{_redKings = remove (jumped start next) (_redKings st)
+                                      ,_redPieces = remove (jumped start next) (_redPieces st)
+                                      ,_blackKings = next:(remove start (_blackKings st))
+                                      ,_message = ""})
+                    | otherwise = st {_message = "Illegal jump !!"}
+                  where 
+                    jumped (x,y) (x',y') = ((x+x') `div` 2, (y+y') `div` 2)
 
 
--- apply_move :: GameState -> Move -> GameState
--- apply_move s m = case _status s of
---   Red -> if m `elem` (simple_moves s) then s{_redPieces = (last m):[x | x <- _redPieces s, not (head m == x)]} else s
---   Black -> if m `elem` (simple_moves s) then s{_blackPieces = (last m):[x | x <- _blackPieces s, not (head m == x)]} else s
---   _ -> initialGameState  
-  
-
-
--- red_move :: GameState -> [Move]
--- red_move s = [[(x,y),(a,b)] | (x,y) <- _redPieces s,
---                               (a,b) <- [(x-1,y-1),(x+1,y-1)]]
-
-
--- black_move :: GameState -> [Move]
--- black_move s = [[(x,y),(a,b)]  |  (x,y) <- _blackPieces s, 
---                                   (a, b) <- [(x+1,y+1), (x-1,y+1)]]
