@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e4e2ebcdcea0724c18b16f0b9c9e765bac1fc30e3be97d651d2453225aa48831
+-- hash: 84bfa0dc8d4ae22a453b450db05ffa5c2aa5392a652f24b7864ead075d425842
 
 name:           tui
 version:        0.0.0.1
@@ -21,7 +21,9 @@ library
   exposed-modules:
       Checkers
       GameLogic
+      GameStructures
       Moves
+      Move_tester
   other-modules:
       Paths_tui
   hs-source-dirs:

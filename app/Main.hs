@@ -3,7 +3,7 @@ module Main where
 --import Tui
 import Checkers
 
-import GameLogic
+-- import GameLogic
 
 import Moves
  
