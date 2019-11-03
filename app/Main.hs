@@ -6,7 +6,8 @@ import Checkers
 -- import GameLogic
 
 import Moves
+
+
  
 main :: IO ()
-main = human applyMove' initialGameState
-
+main = aiTest black_ai red_ai applyMove' initialGameState
