@@ -24,6 +24,7 @@ library
       GameStructures
       Moves
       Move_tester
+
   other-modules:
       Paths_tui
   hs-source-dirs:

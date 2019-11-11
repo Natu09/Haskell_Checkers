@@ -3,11 +3,10 @@ module Main where
 --import Tui
 import Checkers
 
--- import GameLogic
-
+import GameLogic
 import Moves
-
+-- import CheckersNathanielHabtegergesa
 
  
 main :: IO ()
-main = aiTest black_ai red_ai applyMove' initialGameState
+main = redAi red_ai applyMove' initialGameState

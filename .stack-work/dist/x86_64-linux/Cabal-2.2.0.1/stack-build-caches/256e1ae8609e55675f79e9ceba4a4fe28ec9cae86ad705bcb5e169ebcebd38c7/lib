@@ -3,9 +3,9 @@
   size: 10600
   modtime: 1570307086
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/src/Moves.hs:
-  hash: e7ce79323aef16939b99d585cb19a7ef4061612e175a267626659f5d9441947c
-  size: 15101
-  modtime: 1573002017
+  hash: 8bd03f8fe5f2844c508becb918f7d61a2d897e438dd65d5a4b62ff9289ac0a91
+  size: 15153
+  modtime: 1573012534
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/src/Move_tester.hs:
   hash: 0b6c75328e8ad9c07107e7ca2c087bfd245554f5829290b60283ffc9be97147f
   size: 4821
@@ -23,6 +23,6 @@
   size: 2105
   modtime: 1572741190
 /mnt/c/Users/natuo/OneDrive/Documents/SHOOL/FALL 2019/CPSC 449/Stack/Checkers/Haskell-Checkers-Frontend/tui.cabal:
-  hash: 3f01601cad68704f62b88899dde72753eecc6fe719160a296f8f1c497f307ebb
-  size: 1129
-  modtime: 1572307428
+  hash: 8782ef368b5b6c327ae37b33fa2c98ea0b3fc25b13bd1eed2919f02d908383a1
+  size: 1130
+  modtime: 1573442992
